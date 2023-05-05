@@ -62,15 +62,32 @@ app
 
 /////////////////////////////////////  Routing to the article subpage  ////////////////////////////////////
 
-app.route("/articles/:root").get(async (req, res) => {
-  let root = req.params.root;
-  try {
-    let artFound = await Article.findOne({ title: root });
-    res.send(artFound);
-  } catch (err) {
-    res.send(err);
-  }
-});
+app
+  .route("/articles/:root")
+  .get(async (req, res) => {
+    let root = req.params.root;
+    try {
+      let artFound = await Article.findOne({ title: root });
+      res.send(artFound);
+    } catch (err) {
+      res.send(err);
+    }
+  })
+  .put(async (req, res) => {
+    let root = req.params.root;
+    try {
+      let artFound = await Article.findOneAndUpdate(
+        { title: root },
+        { title: req.body.title, content: req.body.content },
+        { overwrite: true },
+      );
+      res.send(await Article.find());
+    } catch (err) {
+      res.send(err);
+    }
+  });
+
+/////////////////////////////////////  Listening to port  ////////////////////////////////////
 
 app.listen("3000", () => {
   console.log("Server started at port 3000.");
