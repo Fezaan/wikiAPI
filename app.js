@@ -8,6 +8,8 @@ app.set("view-engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+/////////////////////////////////////  Connecting to mongoose ////////////////////////////////////
+
 let wikiSchema, Article;
 async function main() {
   try {
@@ -27,6 +29,8 @@ async function main() {
 }
 
 main();
+
+/////////////////////////////////////  Routing for /articles page  ////////////////////////////////////
 
 app
   .route("/articles")
@@ -55,6 +59,18 @@ app
       res.send(err);
     }
   });
+
+/////////////////////////////////////  Routing to the article subpage  ////////////////////////////////////
+
+app.route("/articles/:root").get(async (req, res) => {
+  let root = req.params.root;
+  try {
+    let artFound = await Article.findOne({ title: root });
+    res.send(artFound);
+  } catch (err) {
+    res.send(err);
+  }
+});
 
 app.listen("3000", () => {
   console.log("Server started at port 3000.");
