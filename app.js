@@ -79,9 +79,21 @@ app
       let artFound = await Article.findOneAndUpdate(
         { title: root },
         { title: req.body.title, content: req.body.content },
-        { overwrite: true },
+        { overwrite: true }
       );
       res.send(await Article.find());
+    } catch (err) {
+      res.send(err);
+    }
+  })
+  .patch(async (req, res) => {
+    try {
+      // console.log(req.params.root);
+      await Article.findOneAndUpdate(
+        { title: req.params.root },
+        { $set: req.body }
+      );
+      res.send("Updated");
     } catch (err) {
       res.send(err);
     }
