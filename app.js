@@ -97,6 +97,16 @@ app
     } catch (err) {
       res.send(err);
     }
+  })
+  .delete(async (req, res) => {
+    try {
+      await Article.deleteOne({
+        title: req.params.root,
+      });
+      res.send("Deleted");
+    } catch (err) {
+      res.send(err);
+    }
   });
 
 /////////////////////////////////////  Listening to port  ////////////////////////////////////
